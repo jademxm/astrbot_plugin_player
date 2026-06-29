@@ -44,9 +44,9 @@ class MyPlugin(Star):
     async def terminate(self):
         """可选择实现异步的插件销毁方法，当插件被卸载/停用时会调用。"""
     
-    @filter.command("test")
-    async def test(self, event: AstrMessageEvent,keyword: str):
-        """用法：/test 哈哈"""
+    @filter.command("video")
+    async def video(self, event: AstrMessageEvent,keyword: str):
+        """用法：/video 哈哈"""
         if keyword == "":
             yield event.plain_result("请输入关键字，例如：/video 哈哈")
             return
