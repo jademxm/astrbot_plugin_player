@@ -1,6 +1,7 @@
 from astrbot.api.event import filter, AstrMessageEvent, MessageEventResult
 from astrbot.api.star import Context, Star, register
 from astrbot.api import logger
+from astrbot.api.message_components import Video
 
 @register("player", "player", "一个简单的 插件玩吧", "1.0.0")
 class MyPlugin(Star):
@@ -22,3 +23,11 @@ class MyPlugin(Star):
 
     async def terminate(self):
         """可选择实现异步的插件销毁方法，当插件被卸载/停用时会调用。"""
+    
+    @filter.command("test")
+    async def test(self, event: AstrMessageEvent):
+        # 更通用
+        video = Video.fromFileSystem(
+            path="//Users/mixuanmin/data/attachments/哈哈.mp4"
+        )
+        yield event.chain_result([video])
