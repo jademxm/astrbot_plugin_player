@@ -2,7 +2,27 @@ from astrbot.api.event import filter, AstrMessageEvent, MessageEventResult
 from astrbot.api.star import Context, Star, register
 from astrbot.api import logger
 from astrbot.api.message_components import Video
+import os
+import random
 
+VIDEO_DIR = "/Users/mixuanmin/data/attachments"
+
+def search_video(keyword: str) -> str | None:
+        """
+        模糊匹配文件名（包含后缀）
+        """
+        keyword = keyword.lower()
+        matched = []
+
+        for fname in os.listdir(VIDEO_DIR):
+            if keyword in fname.lower():
+                matched.append(os.path.join(VIDEO_DIR, fname))
+
+        if not matched:
+            return None
+
+        # 多条 → 随机一条
+        return random.choice(matched)
 @register("player", "player", "一个简单的 插件玩吧", "1.0.0")
 class MyPlugin(Star):
     def __init__(self, context: Context):
@@ -26,8 +46,17 @@ class MyPlugin(Star):
     
     @filter.command("test")
     async def test(self, event: AstrMessageEvent):
-        # 更通用
-        video = Video.fromFileSystem(
-            path="//Users/mixuanmin/data/attachments/哈哈.mp4"
-        )
+        """用法：/test 哈哈"""
+        keyword = event.message_str
+        if not keyword:
+            yield event.plain_result("请输入关键字，例如：/video 哈哈")
+            return
+
+        path = search_video(keyword)
+
+        if not path:
+            yield event.plain_result(f"没找到和「{keyword}」相关的视频 😢")
+            return
+
+        video = Video.fromFileSystem(path=path)
         yield event.chain_result([video])
