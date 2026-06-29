@@ -47,7 +47,7 @@ class MyPlugin(Star):
     @filter.command("test")
     async def test(self, event: AstrMessageEvent):
         """用法：/test 哈哈"""
-        keyword = event.message_str
+        keyword = event.message_str.replace("/test", "", 1).strip()
         if not keyword:
             yield event.plain_result("请输入关键字，例如：/video 哈哈")
             return
