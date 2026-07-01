@@ -42,11 +42,17 @@ class MyPlugin(Star):
         if keyword == "":
             yield event.plain_result("请输入关键字，例如：/simage 哈哈")
             return
+        
+        path = search_video(IMAGE_DIR,keyword)
+
+        if path == None:
+            yield event.plain_result(f"没找到和「{keyword}」相关的图片 😢")
+            return
         chain = [
             Comp.At(qq=event.get_sender_id()), # At 消息发送者
-            # Comp.Plain("来看这个图："),
-            Comp.Image.fromFileSystem(search_video(IMAGE_DIR,keyword)), # 从本地文件目录发送图片
-            # Comp.Plain("这是一个图片。")
+            Comp.Plain("来看这个图："),
+            Comp.Image.fromFileSystem(path), # 从本地文件目录发送图片
+            Comp.Plain("这是一个图片。")
         ]
         yield event.chain_result(chain)
     
