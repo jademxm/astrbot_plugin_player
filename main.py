@@ -50,9 +50,7 @@ class MyPlugin(Star):
             return
         chain = [
             Comp.At(qq=event.get_sender_id()), # At 消息发送者
-            Comp.Plain("来看这个图："),
             Comp.Image.fromFileSystem(path), # 从本地文件目录发送图片
-            Comp.Plain("这是一个图片。")
         ]
         yield event.chain_result(chain)
     
