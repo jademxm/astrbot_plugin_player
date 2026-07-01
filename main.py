@@ -20,7 +20,7 @@ def search_video(path:str,keyword: str) -> str | None:
 
         for fname in os.listdir(path):
             if keyword in fname.lower():
-                matched.append(os.path.join(VIDEO_DIR, fname))
+                matched.append(os.path.join(path, fname))
 
         if not matched:
             return None
